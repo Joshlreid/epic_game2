@@ -4,9 +4,9 @@ from settings import *
 class Enemies(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        self.up_image = pygame.image.load("assets/images/ship_0000.png").convert()
+        self.up_image = pygame.image.load("assets/images/ship_0005.png").convert()
         self.up_image.set_colorkey((0, 0, 0))
-        self.down_image = pygame.transform.flip(self.up_image, True, False)
+        self.down_image = pygame.transform.flip(self.up_image, False, True)
         self.image = self.up_image
         self.rect = pygame.rect.Rect(x,y,self.image.get_width(), self.image.get_height())
         self.moving_left = True
@@ -17,13 +17,13 @@ class Enemies(pygame.sprite.Sprite):
     def update(self):
         if self.moving_left:
             self.rect.x -= 2
-            self.image = self.down_image
         elif self.moving_right:
             self.rect.x += 2
-            self.image = self.up_image
         if self.moving_up:
+            self.image = self.up_image
             self.rect.y -= 2
         elif self.moving_down:
+            self.image = self.down_image
             self.rect.y += 2
 
         if self.rect.left < 0:
@@ -45,3 +45,5 @@ class Enemies(pygame.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+
+planes = pygame.sprite.Group()

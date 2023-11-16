@@ -1,8 +1,9 @@
 import pygame
 import sys
+import random
 from settings import *
 from plane import Plane
-from planes import Enemies
+from planes import Enemies, planes
 
 pygame.init()
 
@@ -14,8 +15,10 @@ mountain.set_colorkey((0, 0, 0))
 point_mountain.set_colorkey((0, 0, 0))
 main_plane = Plane(300, 300)
 
-print(point_mountain.get_size())
-print(mountain.get_size())
+for _ in range(NUM_PLANES):
+    planes.add(Enemies(random.randint(0, SCREEN_WIDTH),
+                      random.randint(0, SCREEN_HEIGHT)))
+
 
 background = screen.copy()
 def draw_background():
@@ -34,28 +37,30 @@ while True:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_a:
                 main_plane.moving_left = True
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_d:
                 main_plane.moving_right = True
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_w:
                 main_plane.moving_up = True
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_s:
                 main_plane.moving_down = True
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_a:
                 main_plane.moving_left = False
-            if event.key == pygame.K_RIGHT:
+            if event.key == pygame.K_d:
                 main_plane.moving_right = False
-            if event.key == pygame.K_UP:
+            if event.key == pygame.K_w:
                 main_plane.moving_up = False
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_s:
                 main_plane.moving_down = False
 
     main_plane.update()
+    planes.update()
 
     screen.blit(background, (0, 0))
     main_plane.draw(screen)
+    planes.draw(screen)
 
     pygame.display.flip()
     pygame.time.Clock().tick(60)
