@@ -1,4 +1,3 @@
-import pygame
 
 SKY_COLOR = (92, 105, 237)
 
@@ -6,3 +5,7 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
 NUM_PLANES = 10
+
+
+
+
