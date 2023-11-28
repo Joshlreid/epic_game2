@@ -16,15 +16,15 @@ class Enemies(pygame.sprite.Sprite):
 
     def update(self):
         if self.moving_left:
-            self.rect.x -= 2
+            self.rect.x -= 4
         elif self.moving_right:
-            self.rect.x += 2
+            self.rect.x += 4
         if self.moving_up:
             self.image = self.up_image
-            self.rect.y -= 2
+            self.rect.y -= 4
         elif self.moving_down:
             self.image = self.down_image
-            self.rect.y += 2
+            self.rect.y += 4
 
         if self.rect.left < 0:
             self.rect.left = 0

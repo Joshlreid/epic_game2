@@ -15,10 +15,12 @@ mountain = pygame.image.load("assets/images/mountain1.png").convert()
 point_mountain = pygame.image.load("assets/images/pointy_mountains.png").convert()
 mountain.set_colorkey((0, 0, 0))
 point_mountain.set_colorkey((0, 0, 0))
+score = 0
+death = 0
 
 # moving objects
 main_plane = Plane(300, 300)
-shot = Bullet(300, 300)
+shot = Bullet(700, 700)
 for _ in range(NUM_PLANES):
     planes.add(Enemies(random.randint(0, SCREEN_WIDTH),
                       random.randint(0, SCREEN_HEIGHT)))
@@ -65,6 +67,16 @@ while True:
     main_plane.update()
     planes.update()
     shot.update()
+
+    killed_planes = pygame.sprite.spritecollide(shot, planes, True)
+    score += len(killed_planes)
+    if len(killed_planes) > 0:
+        print(f'You have killed {score} planes!')
+
+
+
+    dead = pygame.sprite.spritecollide(main_plane, planes, False)
+    death += len(dead)
 
     screen.blit(background, (0, 0))
     main_plane.draw(screen)

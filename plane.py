@@ -47,5 +47,6 @@ class Plane(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
+    main_plane = pygame.sprite.Group()
 
 
