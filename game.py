@@ -18,6 +18,10 @@ mountain = pygame.image.load("assets/images/mountain1.png").convert()
 point_mountain = pygame.image.load("assets/images/pointy_mountains.png").convert()
 mountain.set_colorkey((0, 0, 0))
 point_mountain.set_colorkey((0, 0, 0))
+
+gunshot = pygame.mixer.Sound('assets/sounds/gun-gunshot-01.wav')
+explosion = pygame.mixer.Sound('assets/sounds/explosion.wav')
+
 score = 0
 death = 0
 
@@ -25,7 +29,6 @@ death = 0
 
 # moving objects
 main_plane = Plane(300, 300)
-shot = Bullet(700, 700)
 for _ in range(NUM_PLANES):
     planes.add(Enemies(random.randint(0, SCREEN_WIDTH),
                       random.randint(0, SCREEN_HEIGHT)))
@@ -35,12 +38,13 @@ background = screen.copy()
 def draw_background():
     background.fill(SKY_COLOR)
 
-    background.blit(point_mountain, (0, 432 ))
+    background.blit(point_mountain, (0, 432))
     background.blit(mountain, (250, 294))
 
 
 draw_background()
 
+shot_group = pygame.sprite.Group()
 
 # looking for events
 while True:
@@ -68,9 +72,12 @@ while True:
             if event.key == pygame.K_s:
                 main_plane.moving_down = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            shot.shoot(main_plane.rect.center, pygame.mouse.get_pos())
+            gunshot.play()
+            x = Bullet(-200,0)
+            x.shoot(main_plane.rect.center, pygame.mouse.get_pos())
+            shot_group.add(x)
 
-    # getting time
+    # getting time for top left screen
     screen.blit(background, (0, 0))
     time = pygame.time.get_ticks() // 1000
     text = score_font.render(f"{time}", True, (0, 0, 0))
@@ -78,11 +85,12 @@ while True:
 
     main_plane.update()
     planes.update()
-    shot.update()
+    shot_group.update()
 
-    killed_planes = pygame.sprite.spritecollide(shot, planes, True)
+    killed_planes = pygame.sprite.groupcollide(shot_group, planes, True, True)
     score += len(killed_planes)
     if len(killed_planes) > 0:
+        explosion.play()
         print(f'You have killed {score} planes!')
 
     if score == NUM_PLANES:
@@ -90,10 +98,9 @@ while True:
         win_text = game_font.render("You Win!", True, (255, 69, 0))
         screen.blit(win_text, (160, 220))
 
-
-    dead = pygame.sprite.spritecollide(main_plane, planes, False)
-    death += len(dead)
-    if len(dead) > 0:
+    hits = pygame.sprite.spritecollide(main_plane, planes, False)
+    death += len(hits)
+    if death > 0:
         print('You Lose!')
         lose_text = game_font.render("You Lose!", True, (255, 69, 0))
         screen.blit(lose_text, (160, 220))
@@ -101,7 +108,7 @@ while True:
 
     main_plane.draw(screen)
     planes.draw(screen)
-    shot.draw(screen)
+    shot_group.draw(screen)
 
     pygame.display.flip()
     pygame.time.Clock().tick(60)
