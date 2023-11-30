@@ -21,6 +21,8 @@ point_mountain.set_colorkey((0, 0, 0))
 
 gunshot = pygame.mixer.Sound('assets/sounds/gun-gunshot-01.wav')
 explosion = pygame.mixer.Sound('assets/sounds/explosion.wav')
+lose = pygame.mixer.Sound('assets/sounds/lose.wav')
+win = pygame.mixer.Sound('assets/sounds/win.wav')
 
 score = 0
 death = 0
@@ -93,8 +95,9 @@ while True:
         explosion.play()
         print(f'You have killed {score} planes!')
 
-    if score == NUM_PLANES:
+    if score >= NUM_PLANES:
         print('You Win!')
+        win.play()
         win_text = game_font.render("You Win!", True, (255, 69, 0))
         screen.blit(win_text, (160, 220))
 
@@ -102,6 +105,7 @@ while True:
     death += len(hits)
     if death > 0:
         print('You Lose!')
+        lose.play()
         lose_text = game_font.render("You Lose!", True, (255, 69, 0))
         screen.blit(lose_text, (160, 220))
 
