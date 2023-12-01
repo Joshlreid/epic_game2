@@ -15,3 +15,6 @@ Special thanks to:
 * MIDN Kasey Meier
 * MIDN Seamus Smith
 * MIDN Sean Milannette
+* MIDN Will Gutermuth
+
+Points Earned: 40

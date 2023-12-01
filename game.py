@@ -23,9 +23,12 @@ gunshot = pygame.mixer.Sound('assets/sounds/gun-gunshot-01.wav')
 explosion = pygame.mixer.Sound('assets/sounds/explosion.wav')
 lose = pygame.mixer.Sound('assets/sounds/lose.wav')
 win = pygame.mixer.Sound('assets/sounds/win.wav')
+background_sound = pygame.mixer.Sound('assets/sounds/background.wav')
+background_sound.play()
 
 score = 0
 death = 0
+
 
 # time
 
@@ -39,10 +42,8 @@ for _ in range(NUM_PLANES):
 background = screen.copy()
 def draw_background():
     background.fill(SKY_COLOR)
-
     background.blit(point_mountain, (0, 432))
     background.blit(mountain, (250, 294))
-
 
 draw_background()
 
@@ -75,7 +76,7 @@ while True:
                 main_plane.moving_down = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             gunshot.play()
-            x = Bullet(-200,0)
+            x = Bullet(-200, 0)
             x.shoot(main_plane.rect.center, pygame.mouse.get_pos())
             shot_group.add(x)
 
@@ -98,6 +99,7 @@ while True:
     if score >= NUM_PLANES:
         print('You Win!')
         win.play()
+        background_sound.set_volume(0.0001)
         win_text = game_font.render("You Win!", True, (255, 69, 0))
         screen.blit(win_text, (160, 220))
 
@@ -106,9 +108,9 @@ while True:
     if death > 0:
         print('You Lose!')
         lose.play()
+        background_sound.set_volume(0.0001)
         lose_text = game_font.render("You Lose!", True, (255, 69, 0))
         screen.blit(lose_text, (160, 220))
-
 
     main_plane.draw(screen)
     planes.draw(screen)
