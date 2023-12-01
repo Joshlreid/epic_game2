@@ -9,7 +9,7 @@ class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
         self.image = pygame.image.load("assets/images/tile_0000.png").convert()
-        self.image.set_colorkey((0, 0, 0))
+        self.image.set_colorkey((255, 255, 255))
         self.rect = pygame.rect.Rect(x, y, self.image.get_width(), self.image.get_height())
         self.y_speed = 0
         self.x_speed = 0
