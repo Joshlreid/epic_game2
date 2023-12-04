@@ -49,8 +49,8 @@ draw_background()
 
 shot_group = pygame.sprite.Group()
 
-# looking for events
-while True:
+# looking for events while alive and score is less than amount of enemy planes
+while death == 0 and score < NUM_PLANES:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             print("no mo play")
@@ -92,25 +92,18 @@ while True:
 
     killed_planes = pygame.sprite.groupcollide(shot_group, planes, True, True)
     score += len(killed_planes)
+
     if len(killed_planes) > 0:
         explosion.play()
         print(f'You have killed {score} planes!')
 
-    if score >= NUM_PLANES:
-        print('You Win!')
-        win.play()
-        background_sound.set_volume(0.0001)
-        win_text = game_font.render("You Win!", True, (255, 69, 0))
-        screen.blit(win_text, (160, 220))
 
     hits = pygame.sprite.spritecollide(main_plane, planes, False)
     death += len(hits)
-    if death > 0:
-        print('You Lose!')
-        lose.play()
-        background_sound.set_volume(0.0001)
-        lose_text = game_font.render("You Lose!", True, (255, 69, 0))
-        screen.blit(lose_text, (160, 220))
+
+    if time < 2:
+        score = 0
+        death = 0
 
     main_plane.draw(screen)
     planes.draw(screen)
@@ -118,3 +111,35 @@ while True:
 
     pygame.display.flip()
     pygame.time.Clock().tick(60)
+
+# win and lose
+if death > 0:
+    print('You Lose!')
+    lose.play()
+    background_sound.set_volume(0.0001)
+    lose_text = game_font.render("You Lose!", True, (255, 69, 0))
+    screen.blit(lose_text, (160, 220))
+
+else:
+    print('You Win!')
+    win.play()
+    background_sound.set_volume(0.0001)
+    win_text = game_font.render("You Win!", True, (255, 69, 0))
+    screen.blit(win_text, (160, 220))
+pygame.display.update()
+
+main_plane.draw(screen)
+planes.draw(screen)
+shot_group.draw(screen)
+
+pygame.display.flip()
+pygame.time.Clock().tick(60)
+
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            print("no mo play")
+            pygame.quit()
+            sys.exit()
+
